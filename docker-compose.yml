@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  # 1. Our Database
+  postgres:
+    image: postgres:latest
+    container_name: wallet-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: wallet_db
+    ports:
+      - "5432:5432"
+
+  # 2. redis(Cache)
+  redis:
+    image: redis:latest
+    container_name: wallet-redis
+    ports:
+      - "6379:6379"
+
+  # 3. kafka (Message Broker)
+  kafka:
+    image: apache/kafka:latest
+    container_name: wallet-kafka
+    ports:
+      - "9092:9092"
