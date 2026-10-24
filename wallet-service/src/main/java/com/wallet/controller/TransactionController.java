@@ -1,13 +1,15 @@
 package com.wallet.controller;
-import com.wallet.model.Transaction;
-import com.wallet.service.TransactionService;
-import com.wallet.service.TransactionProducer;
+import java.math.BigDecimal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.math.BigDecimal;
+
+import com.wallet.model.Transaction;
+import com.wallet.service.TransactionProducer;
+import com.wallet.service.TransactionService;
 
 @RestController 
 @RequestMapping("/api/transactions")
@@ -24,10 +26,16 @@ public class TransactionController {
 
 
     @PostMapping("/transfer")
-    public ResponseEntity<Transaction> transferMoney(
+    public ResponseEntity<?> transferMoney(
         @RequestParam String sourceAccountNumber,
         @RequestParam String targetAccountNumber,
         @RequestParam BigDecimal amount){
+
+            // Validation Block
+            if(amount.compareTo(BigDecimal.ZERO)<=0){
+                return ResponseEntity.badRequest().body("Amount must be greater than zero.");
+            }
+            
             //move the money in the database
             Transaction transaction = transactionService.transferMoney(sourceAccountNumber, targetAccountNumber, amount);
 
