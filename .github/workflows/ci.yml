@@ -1,0 +1,34 @@
+name: Digital Wallet CI Pipeline
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory : ./wallet-service
+
+
+        steps:
+            - name: Checkout Repository code
+              uses: actions/checkout@v4
+
+            - name: Set up JDK 17 & Maven Cache
+              uses: actions/setup-java@v4
+              with:
+                java-version: '17'
+                distribution: 'temurin'
+                cache: 'maven'
+                cache-dependency-path: '**/pom.xml'
+
+            - name: Grant Execute permission to Maven Wrapper
+              run: chmod +x mvnw
+
+            - name: Build and Run Unit & Slice Tests
+              run: ./mvnw -B clean test
