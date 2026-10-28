@@ -4,6 +4,7 @@ import com.wallet.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class AccountService {
@@ -20,6 +21,10 @@ public class AccountService {
         account.setAccountNumber(accountNumber);
         account.setBalance(InitialBalance);
         return accountRepository.save(account);
+    }
+
+    public List<Account> getAllAccounts(){
+        return accountRepository.findAll();
     }
     
 }

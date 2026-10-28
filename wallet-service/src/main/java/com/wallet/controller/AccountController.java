@@ -6,6 +6,7 @@ import com.wallet.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController //This tells Spring Boot, "This class is going to handle web requests over the internet, and it will reply with raw data (like JSON)
 @RequestMapping("/api/accounts") //defines the exact URL path for this door(Accounts)
@@ -24,5 +25,11 @@ public class AccountController {
 public ResponseEntity<Account> createAccount(@RequestParam String accountNumber, @RequestParam BigDecimal InitialBalance){
     Account newAccount = accountService.createAccount(accountNumber, InitialBalance);
     return ResponseEntity.ok(newAccount);
+}
+
+@GetMapping
+public ResponseEntity<List<Account>> getAllAccounts(){
+    List<Account> accounts = accountService.getAllAccounts();
+    return ResponseEntity.ok(accounts);
 }
 }
