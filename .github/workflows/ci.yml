@@ -32,3 +32,20 @@ jobs:
 
             - name: Build and Run Unit & Slice Tests
               run: ./mvnw -B clean test
+
+            - name: Verify Docker Image Build
+              working-directory: .
+              run: docker build -t digital-wallet-app:latest .
+
+            - name: Deploy to AWS EC2
+              if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                host: ${{secrets.EC2_HOST}}
+                username: ${{secrets.EC2_USERNAME}}
+                key: ${{secrets.EC2_SSH_KEY}}
+                script: 
+                  cd ~/digital-wallet
+                  git fetch origin main
+                  git reset --hard oorigin/main
+                  docker compose up --build -d
